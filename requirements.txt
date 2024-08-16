@@ -7,3 +7,4 @@ pyvis
 wikipedia
 langchain-experimental
 extra-streamlit-components
+tiktoken
