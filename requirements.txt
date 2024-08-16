@@ -1,0 +1,6 @@
+streamlit
+langchain
+langchain-groq
+neo4j
+pyvis
+extra-streamlit-components
