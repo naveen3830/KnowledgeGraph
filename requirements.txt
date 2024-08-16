@@ -4,4 +4,5 @@ langchain-community
 langchain-groq
 neo4j
 pyvis
+langchain-experimental
 extra-streamlit-components
