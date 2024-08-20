@@ -29,7 +29,7 @@ st.sidebar.header("Configuration")
 st.sidebar.write("Please provide your credentials and Wikipedia query below:")
 
 # User inputs
-wikipedia_query = st.sidebar.text_input("Wikipedia Page Name", "Elizabeth I")
+wikipedia_query = st.sidebar.text_input("Wikipedia Page Name")
 groq_api_key = st.sidebar.text_input("Groq API Key", type="password")
 neo4j_uri = st.sidebar.text_input("Neo4j URI")
 neo4j_username = st.sidebar.text_input("Neo4j Username", "neo4j")
@@ -98,6 +98,17 @@ if st.button("Process and Generate Graph"):
         os.environ["NEO4J_USERNAME"] = neo4j_username
         os.environ["NEO4J_PASSWORD"] = neo4j_password
 
+        # Initialize Neo4j driver
+        driver = GraphDatabase.driver(
+            uri=neo4j_uri,
+            auth=(neo4j_username, neo4j_password)
+        )
+        
+        # Clear the graph in Neo4j before loading new data
+        with driver.session() as session:
+            session.run("MATCH (n) DETACH DELETE n")
+            st.success("Cleared existing graph in Neo4j")
+
         # Initialize LLM and graph transformer
         llm = ChatGroq(groq_api_key=groq_api_key, model_name="llama-3.1-70b-versatile")
         llm_transformer = LLMGraphTransformer(llm=llm)
@@ -136,10 +147,6 @@ if st.button("Process and Generate Graph"):
         # Query the graph and visualize
         with st.spinner("Querying graph and generating visualization..."):
             cypher_query = "MATCH (s)-[r]->(t) RETURN s,r,t LIMIT 50"
-            driver = GraphDatabase.driver(
-                uri=neo4j_uri,
-                auth=(neo4j_username, neo4j_password)
-            )
             
             with driver.session() as session:
                 # Check Neo4j content
