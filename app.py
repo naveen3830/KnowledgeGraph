@@ -110,7 +110,7 @@ if st.button("Process and Generate Graph"):
             st.success("Cleared existing graph in Neo4j")
 
         # Initialize LLM and graph transformer
-        llm = ChatGroq(groq_api_key=groq_api_key, model_name="llama-3.1-70b-versatile")
+        llm = ChatGroq(groq_api_key=groq_api_key, model_name="llama-3.3-70b-versatile")
         llm_transformer = LLMGraphTransformer(llm=llm)
 
         # Load and process documents
